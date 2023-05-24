@@ -44,17 +44,20 @@ import { v4 as uuidv4 } from 'uuid';
 import { useSession } from "next-auth/react";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]"
+import { Session } from 'next-auth';
 
 interface Props {
   serverSideApiKeyIsSet: boolean;
   serverSidePluginKeysSet: boolean;
   defaultModelId: OpenAIModelID;
+  session: Session;
 }
 
 const Home = ({
   serverSideApiKeyIsSet,
   serverSidePluginKeysSet,
   defaultModelId,
+  session
 }: Props) => {
   const { t } = useTranslation('chat');
   const { getModels } = useApiService();
@@ -351,10 +354,6 @@ const Home = ({
     serverSidePluginKeysSet,
   ]);
 
-  //AUTH SESSION ---------------------------------------------
-
-  const { data: session } = useSession();
-
   if(!session){
     return <div>Please Login</div>
   }
@@ -372,7 +371,7 @@ const Home = ({
       }}
     >
       <Head>
-        <title>Chatbot UI</title>
+        <title>Chatbot UI: {session.user?.name}</title>
         <meta name="description" content="ChatGPT but better." />
         <meta
           name="viewport"
