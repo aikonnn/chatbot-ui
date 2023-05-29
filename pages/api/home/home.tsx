@@ -63,6 +63,7 @@ const Home = ({
   const { getModels } = useApiService();
   const { getModelsError } = useErrorService();
   const [initialRender, setInitialRender] = useState<boolean>(true);
+  const [userID, setUserID] = useState('');
 
   const contextValue = useCreateReducer<HomeInitialState>({
     initialState,
@@ -258,6 +259,27 @@ const Home = ({
   // ON LOAD --------------------------------------------
 
   useEffect(() => {
+    const idfetch = async () => {
+      const data = await (
+        await fetch(
+          "/api/users/" + session.user?.email,
+        )
+      ).json();
+
+      setUserID(data.userid);
+      return data.userid;
+    };
+
+    const statefetch = async () => {
+      //do nothing for now
+      var id;
+      if(userID !== ''){
+        id = userID;
+      } else {
+        id = await idfetch();
+      }
+    };
+
     const settings = getSettings();
     if (settings.theme) {
       dispatch({
@@ -265,6 +287,8 @@ const Home = ({
         value: settings.theme,
       });
     }
+
+
 
     const apiKey = localStorage.getItem('apiKey');
 

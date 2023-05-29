@@ -7,3 +7,22 @@ services:
       - 3000:3000
     environment:
       - 'OPENAI_API_KEY='
+
+  db:
+    image: postgres
+    hostname: db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: pass
+      POSTGRES_USER: postgres
+      POSTGRES_DB: todo
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+
+volumes:
+  pgdata:
