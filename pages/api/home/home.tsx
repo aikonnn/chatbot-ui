@@ -278,6 +278,8 @@ const Home = ({
       } else {
         id = await idfetch();
       }
+
+      //TODO: fetch state from db in here
     };
 
     const settings = getSettings();
