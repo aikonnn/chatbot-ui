@@ -280,6 +280,57 @@ const Home = ({
       }
 
       //TODO: fetch state from db in here
+      const stored_state = await (
+        await fetch(
+          "/api/state/" + id,
+        )
+      ).json();
+
+      console.log(stored_state);
+
+      //IF NOT IN RECORD: setDefault??
+
+      //getAPIkey
+        //if serversideapikeyisset dispatch empty apikey
+        //else, dispatch key in storage
+      
+        const apiKey = stored_state.apikey;
+
+        if (serverSideApiKeyIsSet) {
+          dispatch({ field: 'apiKey', value: '' });
+    
+          localStorage.removeItem('apiKey');
+        } else if (apiKey) {
+          dispatch({ field: 'apiKey', value: apiKey });
+        }
+
+      //pluginKeys -> to be added
+
+      //sidebars
+        //if width < 640 dispatch false
+        //retrieve chatbar stats
+        if (window.innerWidth < 640) {
+          dispatch({ field: 'showChatbar', value: false });
+          dispatch({ field: 'showPromptbar', value: false });
+        }
+    
+        const showChatbar = stored_state.showchatbar;
+        if (showChatbar !== null) {
+          console.log("setting charbar to " + showChatbar)
+          dispatch({ field: 'showChatbar', value: showChatbar});
+        }
+    
+        const showPromptbar = stored_state.showpromptbar;
+        if (showPromptbar !== null) {
+          console.log("setting promptbar to" + showPromptbar)
+          dispatch({ field: 'showPromptbar', value: showPromptbar});
+        }
+
+      //folders tba
+
+      //prompts tba
+
+      //conversations tba
     };
 
     const settings = getSettings();
@@ -290,9 +341,9 @@ const Home = ({
       });
     }
 
+    statefetch();
 
-
-    const apiKey = localStorage.getItem('apiKey');
+    /* const apiKey = localStorage.getItem('apiKey');
 
     if (serverSideApiKeyIsSet) {
       dispatch({ field: 'apiKey', value: '' });
@@ -300,7 +351,7 @@ const Home = ({
       localStorage.removeItem('apiKey');
     } else if (apiKey) {
       dispatch({ field: 'apiKey', value: apiKey });
-    }
+    } */
 
     const pluginKeys = localStorage.getItem('pluginKeys');
     if (serverSidePluginKeysSet) {
@@ -310,7 +361,7 @@ const Home = ({
       dispatch({ field: 'pluginKeys', value: pluginKeys });
     }
 
-    if (window.innerWidth < 640) {
+    /* if (window.innerWidth < 640) {
       dispatch({ field: 'showChatbar', value: false });
       dispatch({ field: 'showPromptbar', value: false });
     }
@@ -323,7 +374,7 @@ const Home = ({
     const showPromptbar = localStorage.getItem('showPromptbar');
     if (showPromptbar) {
       dispatch({ field: 'showPromptbar', value: showPromptbar === 'true' });
-    }
+    } */
 
     const folders = localStorage.getItem('folders');
     if (folders) {
