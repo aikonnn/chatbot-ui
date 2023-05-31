@@ -6,27 +6,29 @@ create table if not exists users(
     UNIQUE(email)
 );
 
-create table if not exists userState(
-    userid uuid, --LINK TO convoHistory,folders,prompts,pluginKeys
-    apiKey text,
-    showChatbar boolean,
-    showPromptbar boolean,
-    selectedConversation uuid,
+create table if not exists userstate(
+    userid uuid, 
+    apikey text,
+    showchatbar boolean,
+    showpromptbar boolean,
+    selectedconversation uuid,
     UNIQUE(userid)
 );
 
-create table if not exists conversationHistory(
-    id uuid DEFAULT uuid_generate_v4(), --link to messages
+create table if not exists conversationhistory(
+    id uuid DEFAULT uuid_generate_v4(), 
+    created_at timestamp default CURRENT_TIMESTAMP,
     userid uuid,
-    model text, --key to static table openaimodels
+    name text,
+    model text, 
     prompt text,
-    temperature number,
-    folderId uuid,
-)
+    temperature float,
+    folderid uuid
+);
 
 create table if not exists messages(
     convid uuid,
-    ts timestamp default CURRENT_TIMESTAMP(),
-    _role text,
-    content text,
-)
+    ts timestamp default CURRENT_TIMESTAMP,
+    role text,
+    content text
+);

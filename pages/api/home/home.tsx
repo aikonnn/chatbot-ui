@@ -187,7 +187,31 @@ const Home = ({
   // CONVERSATION OPERATIONS  --------------------------------------------
 
   const handleNewConversation = () => {
+    const createNewConvo = async () => {
+      const data = await fetch('/api/conversations', {
+          method: "POST",
+          headers: {
+              'Content-type': 'application/json'
+          },
+          body: JSON.stringify(
+              { 
+                userid: userID,
+                name: 'New Conversation',
+                messages: [],
+                model: (lastConversation?.model.id || defaultModelId) as String,
+                prompt: DEFAULT_SYSTEM_PROMPT,
+                temperature: lastConversation?.temperature ?? DEFAULT_TEMPERATURE,
+                folderID: null,
+              }
+          )
+      })
+
+      return data;
+    }
     const lastConversation = conversations[conversations.length - 1];
+
+    //create new conversation in API and return obj
+    const newData = createNewConvo();
 
     const newConversation: Conversation = {
       id: uuidv4(),
