@@ -186,9 +186,9 @@ const Home = ({
 
   // CONVERSATION OPERATIONS  --------------------------------------------
 
-  const handleNewConversation = () => {
+  const handleNewConversation = async () => {
     const createNewConvo = async () => {
-      const data = await fetch('/api/conversations', {
+      const data = await ( await fetch('/api/conversations', {
           method: "POST",
           headers: {
               'Content-type': 'application/json'
@@ -204,17 +204,17 @@ const Home = ({
                 folderID: null,
               }
           )
-      })
+      })).json();
 
       return data;
     }
     const lastConversation = conversations[conversations.length - 1];
 
     //create new conversation in API and return obj
-    const newData = createNewConvo();
+    const newData =  await createNewConvo();
 
     const newConversation: Conversation = {
-      id: uuidv4(),
+      id: newData.id,
       name: t('New Conversation'),
       messages: [],
       model: lastConversation?.model || {
