@@ -12,5 +12,9 @@ export default async function handleUserState(req: NextApiRequest, res: NextApiR
         }
 
         return res.status(200).json({...ans.rows[0]})
+    } else if(req.method == 'PUT'){
+        console.log("called with id " + req.query.userid + " " + req.body.field +" " + req.body.new);
+        await client.query(`UPDATE userstate SET ${req.body.field} = '${req.body.new}' where userid='${req.query.userid}'`);
+        return res.status(200)
     }
 }

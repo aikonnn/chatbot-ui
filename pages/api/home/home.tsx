@@ -267,6 +267,7 @@ const Home = ({
       ).json();
 
       setUserID(data.userid);
+      dispatch({ field: 'userid', value: data.userid });
       return data.userid;
     };
 
@@ -316,13 +317,11 @@ const Home = ({
     
         const showChatbar = stored_state.showchatbar;
         if (showChatbar !== null) {
-          console.log("setting charbar to " + showChatbar)
           dispatch({ field: 'showChatbar', value: showChatbar});
         }
     
         const showPromptbar = stored_state.showpromptbar;
         if (showPromptbar !== null) {
-          console.log("setting promptbar to" + showPromptbar)
           dispatch({ field: 'showPromptbar', value: showPromptbar});
         }
 

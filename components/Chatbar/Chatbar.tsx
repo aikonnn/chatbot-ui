@@ -34,7 +34,7 @@ export const Chatbar = () => {
   });
 
   const {
-    state: { conversations, showChatbar, defaultModelId, folders, pluginKeys },
+    state: { conversations, showChatbar, defaultModelId, folders, pluginKeys, userid },
     dispatch: homeDispatch,
     handleCreateFolder,
     handleNewConversation,
@@ -48,11 +48,28 @@ export const Chatbar = () => {
 
   const handleApiKeyChange = useCallback(
     (apiKey: string) => {
+      const updateApiKey = async () => {
+          await fetch('/api/state/' +userid, {
+              method: "PUT",
+              headers: {
+                  'Content-type': 'application/json'
+              },
+              body: JSON.stringify(
+                  { 
+                    field: "apikey",
+                    new: apiKey
+                  }
+              )
+          })
+      };
+
       homeDispatch({ field: 'apiKey', value: apiKey });
+
+      updateApiKey();
 
       localStorage.setItem('apiKey', apiKey);
     },
-    [homeDispatch],
+    [homeDispatch, userid],
   );
 
   const handlePluginKeyChange = (pluginKey: PluginKey) => {
