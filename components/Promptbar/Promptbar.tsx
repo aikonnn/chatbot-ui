@@ -28,7 +28,7 @@ const Promptbar = () => {
   });
 
   const {
-    state: { prompts, defaultModelId, showPromptbar },
+    state: { prompts, defaultModelId, showPromptbar, userid },
     dispatch: homeDispatch,
     handleCreateFolder,
   } = useContext(HomeContext);
@@ -38,8 +38,24 @@ const Promptbar = () => {
     dispatch: promptDispatch,
   } = promptBarContextValue;
 
+  const updateDatabase = async (field: string, newValue: string) => {
+    await fetch('/api/state/' +userid, {
+        method: "PUT",
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(
+            { 
+              field: field,
+              new: newValue
+            }
+        )
+    })
+};
+
   const handleTogglePromptbar = () => {
     homeDispatch({ field: 'showPromptbar', value: !showPromptbar });
+    updateDatabase('showPromptbar', (!showPromptbar).toString());
     localStorage.setItem('showPromptbar', JSON.stringify(!showPromptbar));
   };
 

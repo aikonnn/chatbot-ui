@@ -46,26 +46,26 @@ export const Chatbar = () => {
     dispatch: chatDispatch,
   } = chatBarContextValue;
 
+  const updateDatabase = async (field: string, newValue: string) => {
+      await fetch('/api/state/' +userid, {
+          method: "PUT",
+          headers: {
+              'Content-type': 'application/json'
+          },
+          body: JSON.stringify(
+              { 
+                field: field,
+                new: newValue
+              }
+          )
+      })
+  };
+
   const handleApiKeyChange = useCallback(
     (apiKey: string) => {
-      const updateApiKey = async () => {
-          await fetch('/api/state/' +userid, {
-              method: "PUT",
-              headers: {
-                  'Content-type': 'application/json'
-              },
-              body: JSON.stringify(
-                  { 
-                    field: "apikey",
-                    new: apiKey
-                  }
-              )
-          })
-      };
-
       homeDispatch({ field: 'apiKey', value: apiKey });
 
-      updateApiKey();
+      updateDatabase('apikey', apiKey);
 
       localStorage.setItem('apiKey', apiKey);
     },
@@ -191,6 +191,7 @@ export const Chatbar = () => {
 
   const handleToggleChatbar = () => {
     homeDispatch({ field: 'showChatbar', value: !showChatbar });
+    updateDatabase('showchatbar', (!showChatbar).toString());
     localStorage.setItem('showChatbar', JSON.stringify(!showChatbar));
   };
 
