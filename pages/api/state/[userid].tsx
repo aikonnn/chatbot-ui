@@ -19,8 +19,6 @@ export default async function handleUserState(req: NextApiRequest, res: NextApiR
                 ...rest})
         )
 
-        console.log(reformattedData);
-
         return res.status(200).json({
             ...ans.rows[0],
             conversationHistory: reformattedData

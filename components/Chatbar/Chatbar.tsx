@@ -129,6 +129,22 @@ export const Chatbar = () => {
   };
 
   const handleClearConversations = () => {
+    const deleteAllConversation = () => {
+      fetch('/api/conversations', {
+          method: 'DELETE',
+          headers: {
+              'Content-type': 'application/json'
+          },
+          body: JSON.stringify(
+              { 
+                mode: "all",
+                id: userid
+              }
+          )
+          }
+      )
+  }
+
     defaultModelId &&
       homeDispatch({
         field: 'selectedConversation',
@@ -144,6 +160,7 @@ export const Chatbar = () => {
       });
 
     homeDispatch({ field: 'conversations', value: [] });
+    deleteAllConversation();
 
     localStorage.removeItem('conversationHistory');
     localStorage.removeItem('selectedConversation');
@@ -155,9 +172,27 @@ export const Chatbar = () => {
   };
 
   const handleDeleteConversation = (conversation: Conversation) => {
+    const deleteConversation = () => {
+        fetch('/api/conversations', {
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(
+                { 
+                  mode: "single",
+                  id: conversation.id
+                }
+            )
+            }
+        )
+    }
+
     const updatedConversations = conversations.filter(
       (c) => c.id !== conversation.id,
     );
+
+    deleteConversation();
 
     homeDispatch({ field: 'conversations', value: updatedConversations });
     chatDispatch({ field: 'searchTerm', value: '' });
