@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import client from "../../utils/database/dbpool"
+import { OpenAIModels, OpenAIModelID } from "@/types/openai";
 
 
 export default async function handleConversations(req: NextApiRequest, res: NextApiResponse) {
@@ -12,10 +13,10 @@ export default async function handleConversations(req: NextApiRequest, res: Next
             ({folderId: folderid, ...rest})
         )
         
-        const model = await client.query("SELECT * from openaimodels where id = $1",[newData.rows[0].model]);
+        const model = OpenAIModels[newData.rows[0].model as OpenAIModelID];
         return res.status(200).json({
             ...reformattedData[0],
-            model: model.rows[0],
+            model: model,
             messages: []
         })
     }
