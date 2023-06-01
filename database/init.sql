@@ -32,3 +32,15 @@ create table if not exists messages(
     role text,
     content text
 );
+
+create table if not exists openaimodels(
+    id text,
+    name text,
+    maxlength integer,
+    tokenlimit integer
+);
+
+INSERT INTO openaimodels(id, name, maxlength, tokenlimit) values('gpt-3.5-turbo', 'GPT-3.5', 12000, 4000);
+INSERT INTO openaimodels(id, name, maxlength, tokenlimit) values('gpt-35-turbo', 'GPT-3.5', 12000, 4000);
+INSERT INTO openaimodels(id, name, maxlength, tokenlimit) values('gpt-4', 'GPT-4', 24000, 8000);
+INSERT INTO openaimodels(id, name, maxlength, tokenlimit) values('gpt-4-32k', 'GPT-4-32K', 96000, 32000);

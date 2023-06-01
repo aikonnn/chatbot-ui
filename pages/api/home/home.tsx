@@ -212,21 +212,9 @@ const Home = ({
 
     //create new conversation in API and return obj
     const newData =  await createNewConvo();
+    console.log(newData);
 
-    const newConversation: Conversation = {
-      id: newData.id,
-      name: t('New Conversation'),
-      messages: [],
-      model: lastConversation?.model || {
-        id: OpenAIModels[defaultModelId].id,
-        name: OpenAIModels[defaultModelId].name,
-        maxLength: OpenAIModels[defaultModelId].maxLength,
-        tokenLimit: OpenAIModels[defaultModelId].tokenLimit,
-      },
-      prompt: DEFAULT_SYSTEM_PROMPT,
-      temperature: lastConversation?.temperature ?? DEFAULT_TEMPERATURE,
-      folderId: null,
-    };
+    const newConversation: Conversation = newData as Conversation;
 
     const updatedConversations = [...conversations, newConversation];
 
