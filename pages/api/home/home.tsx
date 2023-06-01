@@ -342,6 +342,16 @@ const Home = ({
       //prompts tba
 
       //conversations tba
+      const conversationHistory = stored_state.conversationHistory;
+      if (conversationHistory) {
+        const parsedConversationHistory: Conversation[] =
+          conversationHistory;
+        const cleanedConversationHistory = cleanConversationHistory(
+          parsedConversationHistory,
+        );
+  
+        dispatch({ field: 'conversations', value: cleanedConversationHistory });
+      }
     };
 
     const settings = getSettings();
@@ -397,7 +407,7 @@ const Home = ({
       dispatch({ field: 'prompts', value: JSON.parse(prompts) });
     }
 
-    const conversationHistory = localStorage.getItem('conversationHistory');
+    /* const conversationHistory = localStorage.getItem('conversationHistory');
     if (conversationHistory) {
       const parsedConversationHistory: Conversation[] =
         JSON.parse(conversationHistory);
@@ -406,7 +416,7 @@ const Home = ({
       );
 
       dispatch({ field: 'conversations', value: cleanedConversationHistory });
-    }
+    } */
 
     const selectedConversation = localStorage.getItem('selectedConversation');
     if (selectedConversation) {

@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import client from "../../../utils/database/dbpool"
+import { OpenAIModels, OpenAIModelID } from "@/types/openai";
 
 
 export default async function handleUserState(req: NextApiRequest, res: NextApiResponse) {
@@ -11,7 +12,19 @@ export default async function handleUserState(req: NextApiRequest, res: NextApiR
             ans = await client.query(`SELECT apiKey, showChatbar, showPromptbar, selectedConversation from userState where userid='${req.query.userid}'`);
         }
 
-        return res.status(200).json({...ans.rows[0]})
+        const newData = await client.query("SELECT id, name, model, prompt, temperature, folderId from conversationhistory where userid=$1",[req.query.userid]);
+        const reformattedData = newData.rows.map(({folderid, model, ...rest}: {folderid: string, model: string}) => 
+            ({folderId: folderid, 
+                model: OpenAIModels[model as OpenAIModelID],
+                ...rest})
+        )
+
+        console.log(reformattedData);
+
+        return res.status(200).json({
+            ...ans.rows[0],
+            conversationHistory: reformattedData
+        })
     } else if(req.method == 'PUT'){
         console.log("called with id " + req.query.userid + " " + req.body.field +" " + req.body.new);
         await client.query(`UPDATE userstate SET ${req.body.field} = '${req.body.new}' where userid='${req.query.userid}'`);
