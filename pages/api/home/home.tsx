@@ -110,10 +110,27 @@ const Home = ({
   // FETCH MODELS ----------------------------------------------
 
   const handleSelectConversation = (conversation: Conversation) => {
+    const updateState = async (field: string, newValue: string) => {
+        await fetch('/api/state/' + userID, {
+            method: "PUT",
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(
+                { 
+                  field: field,
+                  new: newValue
+                }
+            )
+        })
+    };
+
     dispatch({
       field: 'selectedConversation',
       value: conversation,
     });
+
+    updateState('selectedconversation', conversation.id);
 
     saveConversation(conversation);
   };
@@ -231,6 +248,24 @@ const Home = ({
     conversation: Conversation,
     data: KeyValuePair,
   ) => {
+    const updateConversationDB = async () => {
+      await ( await fetch('/api/conversations', {
+          method: "PUT",
+          headers: {
+              'Content-type': 'application/json'
+          },
+          body: JSON.stringify(
+              { 
+                convid: conversation.id,
+                field: data.key,
+                value: data.value
+              }
+          )
+      })).json();
+    }
+
+    updateConversationDB();
+
     const updatedConversation = {
       ...conversation,
       [data.key]: data.value,

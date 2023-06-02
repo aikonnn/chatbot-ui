@@ -5,7 +5,22 @@ import { OpenAIModels, OpenAIModelID } from "@/types/openai";
 
 export default async function handleConversations(req: NextApiRequest, res: NextApiResponse) {
     if(req.method === 'PUT'){
-        //saveConversation @utils/app/conversation.ts
+        //updateConversation @home.tsx
+        //CASES FOR MODELS AND MESSAGES
+        if(req.body.field === 'messages') {
+            return res.status(401).json({
+                error: "unsupported"
+            })
+        }
+        if(req.body.field === 'model') {
+            return res.status(401).json({
+                error: "unsupported"
+            })
+        }
+        await client.query(`UPDATE conversationhistory SET ${req.body.field} = '${req.body.value}' where id='${req.body.convid}'`);
+        return res.status(200).json({
+            status: "success"
+        })
     } else if(req.method === 'POST'){
         //newConversation @home.tsx
         const newData = await client.query("INSERT INTO conversationhistory(userid, name, model, prompt, temperature, folderId) values($1::uuid,$2,$3,$4,$5,$6::uuid) RETURNING id, name, model, prompt, temperature, folderId",[req.body.userid, req.body.name, req.body.model, req.body.prompt, req.body.temperature, req.body.folderID]);
