@@ -54,6 +54,7 @@ export const Chat = memo(({ stopConversationRef}: Props) => {
       modelError,
       loading,
       prompts,
+      userid,
     },
     handleUpdateConversation,
     dispatch: homeDispatch,
@@ -76,13 +77,37 @@ export const Chat = memo(({ stopConversationRef}: Props) => {
         if (deleteCount) {
           const updatedMessages = [...selectedConversation.messages];
           for (let i = 0; i < deleteCount; i++) {
+            //delete message?
             updatedMessages.pop();
           }
+          //add message to db
+          await fetch("/api/messages",{
+            method: "POST",
+            headers: {
+              "Content-Type": 'application/json',
+            },
+            body: JSON.stringify({
+              role: message.role,
+              content: message.content,
+            }),
+          })
           updatedConversation = {
             ...selectedConversation,
             messages: [...updatedMessages, message],
           };
         } else {
+          //add message to db
+          await fetch("/api/messages",{
+            method: "POST",
+            headers: {
+              "Content-Type": 'application/json',
+            },
+            body: JSON.stringify({
+              convid: selectedConversation.id,
+              role: message.role,
+              content: message.content,
+            }),
+          })
           updatedConversation = {
             ...selectedConversation,
             messages: [...selectedConversation.messages, message],
@@ -142,6 +167,20 @@ export const Chat = memo(({ stopConversationRef}: Props) => {
             const { content } = message;
             const customName =
               content.length > 30 ? content.substring(0, 30) + '...' : content;
+              //update name
+
+              await fetch('/api/conversations', {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  convid: updatedConversation.id,
+                  field: 'name',
+                  value: customName
+                })
+              });
+
             updatedConversation = {
               ...updatedConversation,
               name: customName,
@@ -173,6 +212,18 @@ export const Chat = memo(({ stopConversationRef}: Props) => {
                 ...updatedConversation,
                 messages: updatedMessages,
               };
+
+              await fetch('/api/state/' + userid, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  field: 'selectedconversation',
+                  value: updatedConversation.id
+                })
+              });
+
               homeDispatch({
                 field: 'selectedConversation',
                 value: updatedConversation,
@@ -198,6 +249,20 @@ export const Chat = memo(({ stopConversationRef}: Props) => {
               });
             }
           }
+          await fetch("/api/messages",{
+            method: "POST",
+            headers: {
+              "Content-Type": 'application/json',
+            },
+            body: JSON.stringify({
+              convid: selectedConversation.id,
+              role: 'assistant',
+              content: text,
+            }),
+          })
+
+          //create new conversation
+
           saveConversation(updatedConversation);
           const updatedConversations: Conversation[] = conversations.map(
             (conversation) => {
@@ -215,6 +280,17 @@ export const Chat = memo(({ stopConversationRef}: Props) => {
           homeDispatch({ field: 'messageIsStreaming', value: false });
         } else {
           const { answer } = await response.json();
+          await fetch("/api/messages",{
+            method: "POST",
+            headers: {
+              "Content-Type": 'application/json',
+            },
+            body: JSON.stringify({
+              convid: selectedConversation.id,
+              role: 'assistant',
+              content: answer,
+            }),
+          })
           const updatedMessages: Message[] = [
             ...updatedConversation.messages,
             { role: 'assistant', content: answer },

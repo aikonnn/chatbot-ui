@@ -387,6 +387,35 @@ const Home = ({
   
         dispatch({ field: 'conversations', value: cleanedConversationHistory });
       }
+
+      const selectedConversation = stored_state.selectedConversation;
+      if (selectedConversation) {
+        const parsedSelectedConversation: Conversation =
+          selectedConversation;
+        const cleanedSelectedConversation = cleanSelectedConversation(
+          parsedSelectedConversation,
+        );
+
+        dispatch({
+          field: 'selectedConversation',
+          value: cleanedSelectedConversation,
+        });
+      } else {
+        //TODO: case where no selected conversation
+        const lastConversation = conversations[conversations.length - 1];
+        dispatch({
+          field: 'selectedConversation',
+          value: {
+            id: uuidv4(),
+            name: t('New Conversation'),
+            messages: [],
+            model: OpenAIModels[defaultModelId],
+            prompt: DEFAULT_SYSTEM_PROMPT,
+            temperature: lastConversation?.temperature ?? DEFAULT_TEMPERATURE,
+            folderId: null,
+          },
+        });
+      }
     };
 
     const settings = getSettings();
@@ -453,7 +482,7 @@ const Home = ({
       dispatch({ field: 'conversations', value: cleanedConversationHistory });
     } */
 
-    const selectedConversation = localStorage.getItem('selectedConversation');
+    /* const selectedConversation = localStorage.getItem('selectedConversation');
     if (selectedConversation) {
       const parsedSelectedConversation: Conversation =
         JSON.parse(selectedConversation);
@@ -479,7 +508,7 @@ const Home = ({
           folderId: null,
         },
       });
-    }
+    } */
   }, [
     defaultModelId,
     dispatch,
