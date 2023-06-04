@@ -261,7 +261,7 @@ export const Chat = memo(({ stopConversationRef}: Props) => {
             }),
           })
 
-          //create new conversation
+          //create new conversation + update id creeated 
 
           saveConversation(updatedConversation);
           const updatedConversations: Conversation[] = conversations.map(
