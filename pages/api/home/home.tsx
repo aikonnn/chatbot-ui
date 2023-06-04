@@ -229,8 +229,6 @@ const Home = ({
 
     //create new conversation in API and return obj
     const newData =  await createNewConvo();
-    console.log(newData);
-
     const newConversation: Conversation = newData as Conversation;
 
     const updatedConversations = [...conversations, newConversation];
@@ -333,9 +331,7 @@ const Home = ({
           "/api/state/" + id,
         )
       ).json();
-
-      console.log(stored_state);
-
+      
       //IF NOT IN RECORD: setDefault??
 
       //getAPIkey
