@@ -87,6 +87,7 @@ export const Chat = memo(({ stopConversationRef}: Props) => {
               "Content-Type": 'application/json',
             },
             body: JSON.stringify({
+              convid: selectedConversation.id,
               role: message.role,
               content: message.content,
             }),

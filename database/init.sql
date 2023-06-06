@@ -27,6 +27,7 @@ create table if not exists conversationhistory(
 );
 
 create table if not exists messages(
+    id uuid DEFAULT uuid_generate_v4(),
     convid uuid,
     ts timestamp default CURRENT_TIMESTAMP,
     role text,

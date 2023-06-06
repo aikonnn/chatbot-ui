@@ -65,13 +65,26 @@ export const ChatMessage: FC<Props> = memo(({ message, messageIndex, onEdit }) =
     setIsEditing(false);
   };
 
-  const handleDeleteMessage = () => {
+  const handleDeleteMessage = async () => {
     if (!selectedConversation) return;
 
     const { messages } = selectedConversation;
     const findIndex = messages.findIndex((elm) => elm === message);
 
     if (findIndex < 0) return;
+
+    await fetch("/api/messages", {
+      method: "DELETE",
+      headers: {
+          'Content-type': 'application/json'
+      },
+      body: JSON.stringify(
+          { 
+            convid: selectedConversation.id,
+            index: findIndex,
+          }
+      )
+  })
 
     if (
       findIndex < messages.length - 1 &&
