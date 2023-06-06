@@ -76,10 +76,24 @@ export const Chat = memo(({ stopConversationRef}: Props) => {
         let updatedConversation: Conversation;
         if (deleteCount) {
           const updatedMessages = [...selectedConversation.messages];
+
+          await fetch("/api/messages",{
+            method: "DELETE",
+            headers: {
+              "Content-Type": 'application/json',
+            },
+            body: JSON.stringify({
+              convid: selectedConversation.id,
+              delCount: deleteCount
+            }),
+          })
+
           for (let i = 0; i < deleteCount; i++) {
             //delete message?
             updatedMessages.pop();
           }
+
+          console.log(updatedMessages);
           //add message to db
           await fetch("/api/messages",{
             method: "POST",
@@ -214,7 +228,7 @@ export const Chat = memo(({ stopConversationRef}: Props) => {
                 messages: updatedMessages,
               };
 
-              await fetch('/api/state/' + userid, {
+              /* await fetch('/api/state/' + userid, {
                 method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json',
@@ -223,7 +237,7 @@ export const Chat = memo(({ stopConversationRef}: Props) => {
                   field: 'selectedconversation',
                   value: updatedConversation.id
                 })
-              });
+              }); */
 
               homeDispatch({
                 field: 'selectedConversation',
