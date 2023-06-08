@@ -18,7 +18,7 @@ export default async function handleConversations(req: NextApiRequest, res: Next
             })
         } if(req.body.field === 'folderId'){
             if(req.body.value === 0){
-                await client.query(`UPDATE conversationhistory SET folderid = uuid_nil() where id=$1`, [req.body.convid]);
+                await client.query(`UPDATE conversationhistory SET folderid = NULL where id=$1`, [req.body.convid]);
             } else {
                 await client.query(`UPDATE conversationhistory SET folderid = $1 where id=$2`, [req.body.value, req.body.convid]);
             }

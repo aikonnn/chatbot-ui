@@ -44,11 +44,13 @@ export default async function handleUserState(req: NextApiRequest, res: NextApiR
             }
         ))
 
-
+        const folderData = await client.query("SELECT id, name, type from folders where userid = $1",[req.query.userid]);
+        
         return res.status(200).json({
             ...ans.rows[0],
             conversationHistory: reformattedData,
-            selectedConversation
+            selectedConversation,
+            folders: folderData.rows
         })
     } else if(req.method == 'PUT'){
         if(req.body.field === 'selectedconversation'){

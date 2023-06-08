@@ -408,6 +408,10 @@ const Home = ({
         }
 
       //folders tba
+      const folders = stored_state.folders;
+      if (folders) {
+        dispatch({ field: 'folders', value: folders as FolderInterface[] });
+      }
 
       //prompts tba
 
@@ -496,11 +500,11 @@ const Home = ({
       dispatch({ field: 'showPromptbar', value: showPromptbar === 'true' });
     } */
 
-    const folders = localStorage.getItem('folders');
+    /* const folders = localStorage.getItem('folders');
     if (folders) {
       dispatch({ field: 'folders', value: JSON.parse(folders) });
     }
-
+ */
     const prompts = localStorage.getItem('prompts');
     if (prompts) {
       dispatch({ field: 'prompts', value: JSON.parse(prompts) });
