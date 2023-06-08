@@ -36,6 +36,7 @@ create table if not exists messages(
 
 create table if not exists folders(
     id uuid DEFAULT uuid_generate_v4(),
+    userid uuid,
     name text,
     type text
 );

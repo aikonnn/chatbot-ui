@@ -137,9 +137,23 @@ const Home = ({
 
   // FOLDER OPERATIONS  --------------------------------------------
 
-  const handleCreateFolder = (name: string, type: FolderType) => {
+  const handleCreateFolder = async (name: string, type: FolderType) => {
+    const data = await( await fetch("/api/folders",{
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(
+            { 
+              name: name,
+              type: type,
+              userid: userID,
+            }
+        )
+    })).json();
+
     const newFolder: FolderInterface = {
-      id: uuidv4(),
+      id: data.id,
       name,
       type,
     };
@@ -154,6 +168,18 @@ const Home = ({
     const updatedFolders = folders.filter((f) => f.id !== folderId);
     dispatch({ field: 'folders', value: updatedFolders });
     saveFolders(updatedFolders);
+
+    fetch("/api/folders",{
+        method: "DELETE",
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(
+            { 
+              folderid: folderId,
+            }
+        )
+    });
 
     const updatedConversations: Conversation[] = conversations.map((c) => {
       if (c.folderId === folderId) {
@@ -185,6 +211,19 @@ const Home = ({
   };
 
   const handleUpdateFolder = (folderId: string, name: string) => {
+    fetch("/api/folders",{
+        method: "PUT",
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(
+            { 
+              id: folderId,
+              name: name,
+            }
+        )
+    });
+
     const updatedFolders = folders.map((f) => {
       if (f.id === folderId) {
         return {

@@ -16,6 +16,16 @@ export default async function handleConversations(req: NextApiRequest, res: Next
             return res.status(401).json({
                 error: "unsupported"
             })
+        } if(req.body.field === 'folderId'){
+            if(req.body.value === 0){
+                await client.query(`UPDATE conversationhistory SET folderid = uuid_nil() where id=$1`, [req.body.convid]);
+            } else {
+                await client.query(`UPDATE conversationhistory SET folderid = $1 where id=$2`, [req.body.value, req.body.convid]);
+            }
+
+            return res.status(200).json({
+                status: "success"
+            });
         }
         await client.query(`UPDATE conversationhistory SET ${req.body.field} = '${req.body.value}' where id='${req.body.convid}'`);
         return res.status(200).json({
