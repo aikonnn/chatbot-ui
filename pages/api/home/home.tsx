@@ -415,6 +415,10 @@ const Home = ({
       }
 
       //prompts tba
+      const prompts = stored_state.prompts;
+      if (prompts) {
+        dispatch({ field: 'prompts', value: prompts as Prompt[] });
+      }
 
       //conversations tba
       const conversationHistory = stored_state.conversationHistory;
@@ -506,10 +510,10 @@ const Home = ({
       dispatch({ field: 'folders', value: JSON.parse(folders) });
     }
  */
-    const prompts = localStorage.getItem('prompts');
+    /* const prompts = localStorage.getItem('prompts');
     if (prompts) {
       dispatch({ field: 'prompts', value: JSON.parse(prompts) });
-    }
+    } */
 
     /* const conversationHistory = localStorage.getItem('conversationHistory');
     if (conversationHistory) {

@@ -46,11 +46,21 @@ export default async function handleUserState(req: NextApiRequest, res: NextApiR
 
         const folderData = await client.query("SELECT id, name, type from folders where userid = $1",[req.query.userid]);
 
+        const promptData = await client.query("SELECT id, name, description, content, model, folderid from prompts where userid = $1",[req.query.userid]);
+        const reformattedPrompts = await Promise.all(promptData.rows.map(async (rawPrompt: any) => {
+            return {
+                ...rawPrompt,
+                model: OpenAIModels[rawPrompt.model as OpenAIModelID],
+                folderId: rawPrompt.folderid
+            }
+        }))
+
         return res.status(200).json({
             ...ans.rows[0],
             conversationHistory: reformattedData,
             selectedConversation,
-            folders: folderData.rows
+            folders: folderData.rows,
+            prompts: reformattedPrompts
         })
     } else if(req.method == 'PUT'){
         if(req.body.field === 'selectedconversation'){
