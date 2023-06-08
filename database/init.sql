@@ -33,3 +33,20 @@ create table if not exists messages(
     role text,
     content text
 );
+
+create table if not exists folders(
+    id uuid DEFAULT uuid_generate_v4(),
+    name text,
+    type text
+);
+
+create table if not exists prompts(
+    id uuid DEFAULT uuid_generate_v4(), 
+    created_at timestamp default CURRENT_TIMESTAMP,
+    userid uuid,
+    name text,
+    model text, 
+    description text,
+    content text,
+    folderid uuid
+);
