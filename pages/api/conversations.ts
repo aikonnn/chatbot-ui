@@ -61,6 +61,9 @@ export default async function handleConversations(req: NextApiRequest, res: Next
             }
             const query = "DELETE FROM conversationhistory WHERE userid = $1::uuid";
             await client.query(query, [req.body.id])
+
+            const folderQuery = "DELETE FROM folders where userid = $1 and type = $2"
+            await client.query(folderQuery, [req.body.id, "chat"])
         }
         return res.status(200).json({
             status: "success"

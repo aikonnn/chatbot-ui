@@ -45,7 +45,7 @@ export default async function handleUserState(req: NextApiRequest, res: NextApiR
         ))
 
         const folderData = await client.query("SELECT id, name, type from folders where userid = $1",[req.query.userid]);
-        
+
         return res.status(200).json({
             ...ans.rows[0],
             conversationHistory: reformattedData,
@@ -59,7 +59,7 @@ export default async function handleUserState(req: NextApiRequest, res: NextApiR
                 status: "success"
             })
         }
-        console.log("calling this " + req.query.userid)
+        
         //TODO: fix this for userid
         await client.query(`UPDATE userstate SET ${req.body.field} = '${req.body.new}' where userid='${req.query.userid}'`);
         return res.status(200).json({
