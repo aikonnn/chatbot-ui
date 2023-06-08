@@ -15,6 +15,12 @@ export default async function handleFolders(req: NextApiRequest, res: NextApiRes
     } if(req.method === 'DELETE'){
         const query = "DELETE from folders where id = $1"
         await client.query(query, [req.body.folderid]);
+        
+        const chatQuery = "UPDATE conversationhistory SET folderid = NULL where folderid = $1"
+        const promptQuery = "UPDATE prompts SET folderid = NULL where folderid = $1"
+
+        await client.query(chatQuery, [req.body.folderid]);
+        await client.query(promptQuery, [req.body.folderid]);
 
         return res.status(200).json({
             status: "success"

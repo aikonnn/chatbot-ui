@@ -46,7 +46,6 @@ export default async function handleConversations(req: NextApiRequest, res: Next
         })
 
     } else if((req.method === 'DELETE')){
-        //TODO: DELETE RELATED MESSAGES
         if(req.body.mode === 'single'){
             const query1 = "DELETE FROM conversationhistory WHERE id = $1::uuid";
             const query2 = "DELETE FROM messages WHERE convid = $1::uuid";
