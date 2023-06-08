@@ -3,7 +3,7 @@ import client from "../../utils/database/dbpool"
 import { OpenAIModels, OpenAIModelID } from "@/types/openai";
 
 
-export default async function handleConversations(req: NextApiRequest, res: NextApiResponse) {
+export default async function handleFolders(req: NextApiRequest, res: NextApiResponse) {
     if(req.method === 'POST'){
         //add to db
         const query = "INSERT into folders(name, type, userid) values($1,$2, $3) returning id";

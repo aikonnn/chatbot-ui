@@ -59,10 +59,27 @@ const Promptbar = () => {
     localStorage.setItem('showPromptbar', JSON.stringify(!showPromptbar));
   };
 
-  const handleCreatePrompt = () => {
+  const handleCreatePrompt = async () => {
     if (defaultModelId) {
+      const idData = await ( await fetch('/api/prompts', {
+          method: 'POST',
+          headers: {
+              'Content-type': 'application/json'
+          },
+          body: JSON.stringify(
+              { 
+                name: `Prompt ${prompts.length + 1}`,
+                description: '',
+                content: '',
+                model: defaultModelId as String,
+                userid: userid 
+              }
+          )
+          }
+      )).json();
+
       const newPrompt: Prompt = {
-        id: uuidv4(),
+        id: idData.id,
         name: `Prompt ${prompts.length + 1}`,
         description: '',
         content: '',
@@ -79,13 +96,44 @@ const Promptbar = () => {
   };
 
   const handleDeletePrompt = (prompt: Prompt) => {
-    const updatedPrompts = prompts.filter((p) => p.id !== prompt.id);
+    fetch('/api/prompts', {
+        method: 'DELETE',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(
+            { 
+              id: prompt.id 
+            }
+        )
+        }
+    );
 
+    const updatedPrompts = prompts.filter((p) => p.id !== prompt.id);
+    
     homeDispatch({ field: 'prompts', value: updatedPrompts });
     savePrompts(updatedPrompts);
   };
 
   const handleUpdatePrompt = (prompt: Prompt) => {
+    fetch('/api/prompts', {
+        method: 'PUT',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(
+            { 
+              name: prompt.name,
+              description: prompt.description,
+              content: prompt.content,
+              model: prompt.model.id,
+              id: prompt.id,
+              folderid: prompt.folderId
+            }
+        )
+        }
+    );
+
     const updatedPrompts = prompts.map((p) => {
       if (p.id === prompt.id) {
         return prompt;

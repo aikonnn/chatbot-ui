@@ -181,6 +181,7 @@ const Home = ({
         )
     });
 
+    //TODO: set folderid to null
     const updatedConversations: Conversation[] = conversations.map((c) => {
       if (c.folderId === folderId) {
         return {
