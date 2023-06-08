@@ -4,6 +4,6 @@ import { ChatMessage, Props } from "./ChatMessage";
 export const MemoizedChatMessage: FC<Props> = memo(
     ChatMessage,
     (prevProps, nextProps) => (
-        prevProps.message === nextProps.message
+        prevProps.message === nextProps.message && prevProps.onEdit === nextProps.onEdit
     )
 );
