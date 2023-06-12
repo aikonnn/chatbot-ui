@@ -51,3 +51,14 @@ create table if not exists prompts(
     content text,
     folderid uuid
 );
+
+create table if not exists plugins(
+    userid uuid,
+    pluginid text
+);
+
+create table if not exists googlekeys(
+    userid uuid,
+    google_api_key text,
+    google_cse_id text
+);

@@ -55,7 +55,6 @@ export default async function handleConversations(req: NextApiRequest, res: Next
             const convList = (await client.query("SELECT id from conversationhistory where userid = $1::uuid",[req.body.id])).rows;
 
             for(let i = 0; i < convList.length; i++){
-                console.log(convList[i].id);
                 await client.query("DELETE FROM messages WHERE convid = $1::uuid", [convList[i].id]);
             }
             const query = "DELETE FROM conversationhistory WHERE userid = $1::uuid";

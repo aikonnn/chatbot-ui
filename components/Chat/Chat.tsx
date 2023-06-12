@@ -93,7 +93,6 @@ export const Chat = memo(({ stopConversationRef}: Props) => {
             updatedMessages.pop();
           }
 
-          console.log(updatedMessages);
           //add message to db
           await fetch("/api/messages",{
             method: "POST",

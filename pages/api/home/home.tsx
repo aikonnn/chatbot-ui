@@ -486,7 +486,7 @@ const Home = ({
       dispatch({ field: 'pluginKeys', value: [] });
       localStorage.removeItem('pluginKeys');
     } else if (pluginKeys) {
-      dispatch({ field: 'pluginKeys', value: pluginKeys });
+      dispatch({ field: 'pluginKeys', value: JSON.parse(pluginKeys) });
     }
 
     /* if (window.innerWidth < 640) {

@@ -74,6 +74,21 @@ export const Chatbar = () => {
 
   const handlePluginKeyChange = (pluginKey: PluginKey) => {
     if (pluginKeys.some((key) => key.pluginId === pluginKey.pluginId)) {
+      //update existing plugin key
+      fetch('/api/plugins', {
+          method: "PUT",
+          headers: {
+              'Content-type': 'application/json'
+          },
+          body: JSON.stringify(
+              { 
+                userid: userid,
+                pluginid: pluginKey.pluginId as String,
+                requiredKeys: pluginKey.requiredKeys
+              }
+          )
+      })
+
       const updatedPluginKeys = pluginKeys.map((key) => {
         if (key.pluginId === pluginKey.pluginId) {
           return pluginKey;
@@ -86,6 +101,20 @@ export const Chatbar = () => {
 
       localStorage.setItem('pluginKeys', JSON.stringify(updatedPluginKeys));
     } else {
+      //add new plugin key
+      fetch('/api/plugins', {
+          method: "POST",
+          headers: {
+              'Content-type': 'application/json'
+          },
+          body: JSON.stringify(
+              { 
+                userid: userid,
+                pluginid: pluginKey.pluginId as String,
+                requiredKeys: pluginKey.requiredKeys
+              }
+          )
+      })
       homeDispatch({ field: 'pluginKeys', value: [...pluginKeys, pluginKey] });
 
       localStorage.setItem(
@@ -96,6 +125,19 @@ export const Chatbar = () => {
   };
 
   const handleClearPluginKey = (pluginKey: PluginKey) => {
+    fetch('/api/plugins', {
+        method: "DELETE",
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(
+            { 
+              userid: userid,
+              pluginid: pluginKey.pluginId as String,
+            }
+        )
+    })
+
     const updatedPluginKeys = pluginKeys.filter(
       (key) => key.pluginId !== pluginKey.pluginId,
     );
