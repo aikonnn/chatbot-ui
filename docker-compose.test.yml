@@ -1,0 +1,8 @@
+services:
+  cypress:
+      image: cypress/included:latest
+      volumes:
+        - ./cypress_tests/cypress:/cypress
+        - ./cypress_tests/cypress.config.js:/cypress.config.js
+      depends_on:
+        - chatgpt
