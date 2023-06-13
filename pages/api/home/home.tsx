@@ -567,11 +567,7 @@ const Home = ({
     serverSideApiKeyIsSet,
     serverSidePluginKeysSet,
   ]);
-
-  if(!session){
-    return <div>Please Login</div>
-  }
-
+  
   return (
     <HomeContext.Provider
       value={{
