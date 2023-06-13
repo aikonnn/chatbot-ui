@@ -388,6 +388,15 @@ const Home = ({
         }
 
       //pluginKeys -> to be added
+      const pluginKeys = stored_state.pluginkeys;
+      if (serverSidePluginKeysSet) {
+        dispatch({ field: 'pluginKeys', value: [] });
+        localStorage.removeItem('pluginKeys');
+      } else if (pluginKeys) {
+        dispatch({ field: 'pluginKeys', value: pluginKeys });
+      }
+
+      console.log(stored_state);
 
       //sidebars
         //if width < 640 dispatch false
@@ -481,13 +490,13 @@ const Home = ({
       dispatch({ field: 'apiKey', value: apiKey });
     } */
 
-    const pluginKeys = localStorage.getItem('pluginKeys');
+    /* const pluginKeys = localStorage.getItem('pluginKeys');
     if (serverSidePluginKeysSet) {
       dispatch({ field: 'pluginKeys', value: [] });
       localStorage.removeItem('pluginKeys');
     } else if (pluginKeys) {
       dispatch({ field: 'pluginKeys', value: JSON.parse(pluginKeys) });
-    }
+    } */
 
     /* if (window.innerWidth < 640) {
       dispatch({ field: 'showChatbar', value: false });
