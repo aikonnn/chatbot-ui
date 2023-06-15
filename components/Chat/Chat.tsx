@@ -33,7 +33,7 @@ import { ModelSelect } from './ModelSelect';
 import { SystemPrompt } from './SystemPrompt';
 import { TemperatureSlider } from './Temperature';
 import { MemoizedChatMessage } from './MemoizedChatMessage';
-import { Session } from 'next-auth';
+import { OpenAIModels } from '@/types/openai';
 
 interface Props {
   stopConversationRef: MutableRefObject<boolean>;
@@ -74,6 +74,36 @@ export const Chat = memo(({ stopConversationRef}: Props) => {
     async (message: Message, deleteCount = 0, plugin: Plugin | null = null) => {
       if (selectedConversation) {
         let updatedConversation: Conversation;
+        if(!conversations.find((elem: Conversation) => {
+          return elem.id === selectedConversation.id
+        })){
+          const convData = await ( await fetch('/api/conversations', {
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(
+                { 
+                  userid: userid,
+                  name: selectedConversation.name,
+                  model: selectedConversation.model.id,
+                  prompt: selectedConversation.prompt,
+                  temperature: selectedConversation.temperature,
+                  folderId: selectedConversation.folderId,
+                }
+              )
+            })).json();
+
+          updatedConversation = {
+            ...selectedConversation,
+            id: convData.id
+          }
+        } else {
+          updatedConversation = {
+            ...selectedConversation
+          }
+        }
+
         if (deleteCount) {
           const updatedMessages = [...selectedConversation.messages];
 
@@ -83,7 +113,7 @@ export const Chat = memo(({ stopConversationRef}: Props) => {
               "Content-Type": 'application/json',
             },
             body: JSON.stringify({
-              convid: selectedConversation.id,
+              convid: updatedConversation.id,
               delCount: deleteCount
             }),
           })
@@ -100,13 +130,13 @@ export const Chat = memo(({ stopConversationRef}: Props) => {
               "Content-Type": 'application/json',
             },
             body: JSON.stringify({
-              convid: selectedConversation.id,
+              convid: updatedConversation.id,
               role: message.role,
               content: message.content,
             }),
           })
           updatedConversation = {
-            ...selectedConversation,
+            ...updatedConversation,
             messages: [...updatedMessages, message],
           };
         } else {
@@ -117,13 +147,13 @@ export const Chat = memo(({ stopConversationRef}: Props) => {
               "Content-Type": 'application/json',
             },
             body: JSON.stringify({
-              convid: selectedConversation.id,
+              convid: updatedConversation.id,
               role: message.role,
               content: message.content,
             }),
           })
           updatedConversation = {
-            ...selectedConversation,
+            ...updatedConversation,
             messages: [...selectedConversation.messages, message],
           };
         }
@@ -269,7 +299,7 @@ export const Chat = memo(({ stopConversationRef}: Props) => {
               "Content-Type": 'application/json',
             },
             body: JSON.stringify({
-              convid: selectedConversation.id,
+              convid: updatedConversation.id,
               role: 'assistant',
               content: text,
             }),
@@ -300,7 +330,7 @@ export const Chat = memo(({ stopConversationRef}: Props) => {
               "Content-Type": 'application/json',
             },
             body: JSON.stringify({
-              convid: selectedConversation.id,
+              convid: updatedConversation.id,
               role: 'assistant',
               content: answer,
             }),
