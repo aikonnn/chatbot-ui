@@ -26,5 +26,15 @@ services:
     expose:
       - 5432
 
+  dex:
+    image: ghcr.io/dexidp/dex:latest-alpine
+    user: root
+    volumes:
+      - ./dex/config.yaml:/etc/dex/config.docker.yaml
+    ports:
+      - 5556:5556
+    expose:
+      - 5556
+
 volumes:
   pgdata:

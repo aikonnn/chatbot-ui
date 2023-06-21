@@ -13,7 +13,7 @@ web:
   tlsKey: {{ getenv "DEX_WEB_TLS_KEY" | required "$DEX_WEB_TLS_KEY in case of web.https is enabled" }}
   tlsCert: {{ getenv "DEX_WEB_TLS_CERT" | required "$DEX_WEB_TLS_CERT in case of web.https is enabled" }}
 {{- end }}
-  http: {{ getenv "DEX_WEB_HTTP" "127.0.0.1:5556" }}
+  http: {{ getenv "DEX_WEB_HTTP" "0.0.0.0:5556" }}
 
 {{- if getenv "DEX_TELEMETRY_HTTP" }}
 telemetry:
@@ -52,3 +52,10 @@ staticPasswords:
     hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
     username: "admin"
     userID: "08a8684b-db88-4b73-90a9-3cd1661f5466"
+
+staticClients:
+  - id: chatui-app
+    redirectURIs:
+    - 'http://chatgpt:3000/api/auth/callback/dex-provider'
+    name: 'Chatui App'
+    secret: ZXhhbXBsZS1hcHAtc2VjcmV0

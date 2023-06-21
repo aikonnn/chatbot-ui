@@ -7,9 +7,3 @@ services:
       depends_on:
         - chatgpt
         - dex
-        
-  dex:
-      image: ghcr.io/dexidp/dex:latest-alpine
-      user: root
-      volumes:
-        - ./dex/config.yaml:/etc/dex/config.docker.yaml

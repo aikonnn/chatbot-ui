@@ -23,6 +23,7 @@ const LogIn = () => {
           <div className="my-5">
           <button className="w-100 my-1 w-[280px] bg-white rounded-md shadow-xl py-2 flex items-center justify-center" onClick={()=>signIn('google')}><IconBrandGoogle className="mx-2"/>Login with Google </button>
           <button className="w-100 my-1 w-[280px] bg-white rounded-md shadow-xl py-2 flex items-center justify-center" onClick={()=>signIn('github')}><IconBrandGithub className="mx-2"/>Login with Github </button>
+          <button className="w-100 my-1 w-[280px] bg-white rounded-md shadow-xl py-2 flex items-center justify-center" onClick={()=>signIn('dex-provider')}><IconBrandGithub className="mx-2"/>Login with DEX </button>
           </div>
         </div>
       </div>
