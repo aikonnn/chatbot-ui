@@ -55,7 +55,9 @@ staticPasswords:
 
 staticClients:
   - id: chatui-app
+    public: true
     redirectURIs:
+    - 'http://chatgpt:3000/api/auth/callback/dex-provider'
     - 'http://localhost:3000/api/auth/callback/dex-provider'
     name: 'Chatui App'
     secret: ZXhhbXBsZS1hcHAtc2VjcmV0
