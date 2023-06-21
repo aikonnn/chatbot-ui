@@ -1,6 +1,6 @@
 {{- /* NOTE: This configuration file is an example and exists only for development purposes. */ -}}
 {{- /* To find more about gomplate formatting, please visit its documentation site - https://docs.gomplate.ca/ */ -}}
-issuer: {{ getenv "DEX_ISSUER" "http://127.0.0.1:5556/dex" }}
+issuer: {{ getenv "DEX_ISSUER" "http://dex:5556/dex" }}
 
 storage:
   type: sqlite3
@@ -56,6 +56,6 @@ staticPasswords:
 staticClients:
   - id: chatui-app
     redirectURIs:
-    - 'http://chatgpt:3000/api/auth/callback/dex-provider'
+    - 'http://localhost:3000/api/auth/callback/dex-provider'
     name: 'Chatui App'
     secret: ZXhhbXBsZS1hcHAtc2VjcmV0
